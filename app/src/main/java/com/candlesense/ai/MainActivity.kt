@@ -128,6 +128,8 @@ private fun CandleSenseApp() {
                     val green = direction == CandleDirection.BULLISH
                     Text(if (green) "Bullish candle (green)" else if (direction == CandleDirection.BEARISH) "Bearish candle (red)" else "Neutral candle",
                         color = if (green) Color(0xFF138456) else Color(0xFFD34454), fontWeight = FontWeight.Bold)
+                    Text("Pattern: ${CandleAnalysis.patternNameUrdu(candle)}", color = Color(0xFF176B57), fontWeight = FontWeight.Bold)
+                    Text(CandleAnalysis.patternExplanationUrdu(candle), color = Color(0xFF40556B))
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         PriceCard("Open", candle.open, Modifier.weight(1f))
                         PriceCard("High", candle.high, Modifier.weight(1f))
