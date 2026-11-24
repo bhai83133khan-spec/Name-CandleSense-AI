@@ -98,13 +98,22 @@ private fun CandleSenseApp() {
                 value = search, onValueChange = { search = it }, modifier = Modifier.fillMaxWidth(),
                 label = { Text("Search demo coin") }, singleLine = true
             )
+            val filteredSymbols = filterDemoSymbols(search, demoCoins)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                demoCoins.filter { it.contains(search.trim(), ignoreCase = true) }.forEach { symbol ->
-                    FilterChip(
-                        selected = selectedCoin == symbol,
-                onClick = { selectedCoin = symbol; selectedIndex = 0 },
-                label = { Text(symbol) }
+                if (filteredSymbols.isEmpty()) {
+                    Text(
+                        "No demo symbol found. Try BTC/USD, ETH/USD, or SOL/USD.",
+                        color = Color(0xFF40556B),
+                        fontSize = 12.sp
                     )
+                } else {
+                    filteredSymbols.forEach { symbol ->
+                        FilterChip(
+                            selected = selectedCoin == symbol,
+                            onClick = { selectedCoin = symbol; selectedIndex = 0 },
+                            label = { Text(symbol) }
+                        )
+                    }
                 }
             }
             Card(
