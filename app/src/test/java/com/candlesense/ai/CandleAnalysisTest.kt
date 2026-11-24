@@ -14,7 +14,7 @@ class CandleAnalysisTest {
 
     @Test
     fun singleCandlePatternsAreClassifiedAndExplained() {
-        assertEquals(CandlePattern.DOJI, CandleAnalysis.pattern(Candle(10.0, 11.0, 9.0, 10.05))
+        assertEquals(CandlePattern.DOJI, CandleAnalysis.pattern(Candle(10.0, 11.0, 9.0, 10.05)))
         assertEquals(CandlePattern.HAMMER, CandleAnalysis.pattern(Candle(100.0, 103.0, 90.0, 102.0)))
         assertEquals(CandlePattern.SHOOTING_STAR, CandleAnalysis.pattern(Candle(102.0, 112.0, 99.0, 100.0)))
         assertEquals(CandlePattern.SPINNING_TOP, CandleAnalysis.pattern(Candle(100.0, 104.0, 97.0, 101.0)))
