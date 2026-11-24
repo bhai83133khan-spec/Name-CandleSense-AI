@@ -150,6 +150,7 @@ private fun CandleSenseApp() {
                         Text("Two-candle pattern: ${CandlePairAnalysis.nameUrdu(pairPattern)}",
                             color = Color(0xFF176B57), fontWeight = FontWeight.Bold)
                         Text(CandlePairAnalysis.explanationUrdu(pairPattern), color = Color(0xFF40556B))
+                        Text(CandlePairAnalysis.confirmationChecklistUrdu(pairPattern), color = Color(0xFF6B5B37))
                     }
                     if (selectedIndex >= 2) {
                         val threePattern = ThreeCandleAnalysis.classify(
