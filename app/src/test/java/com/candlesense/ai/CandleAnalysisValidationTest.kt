@@ -29,4 +29,29 @@ class CandleAnalysisValidationTest {
         assertEquals(9.0, CandleAnalysis.recentHigh(candles, 2, 2)!!, 0.0001)
         assertEquals(3.0, CandleAnalysis.recentLow(candles, 2, 2)!!, 0.0001)
     }
+    @Test
+    fun finiteEndpointsWithOverflowingRangeAreRejected() {
+        val extreme = Candle(
+            open = -Double.MAX_VALUE,
+            high = Double.MAX_VALUE,
+            low = -Double.MAX_VALUE,
+            close = Double.MAX_VALUE
+        )
+        assertEquals(false, CandleAnalysis.isValid(extreme))
+        assertEquals(CandlePattern.INVALID, CandleAnalysis.pattern(extreme))
+        assertEquals(0.0, CandleAnalysis.bodyRatio(extreme), 0.0001)
+    }
+
+    @Test
+    fun tapHitTestingRejectsInvalidGeometryAndClampsEdges() {
+        assertNull(CandleAnalysis.nearestIndexForTap(10f, 0f, 3))
+        assertNull(CandleAnalysis.nearestIndexForTap(Float.NaN, 100f, 3))
+        assertNull(CandleAnalysis.nearestIndexForTap(10f, 100f, 0))
+        assertEquals(0, CandleAnalysis.nearestIndexForTap(-10f, 100f, 3))
+        assertEquals(0, CandleAnalysis.nearestIndexForTap(25f, 100f, 3))
+        assertEquals(1, CandleAnalysis.nearestIndexForTap(50f, 100f, 3))
+        assertEquals(2, CandleAnalysis.nearestIndexForTap(75f, 100f, 3))
+        assertEquals(2, CandleAnalysis.nearestIndexForTap(1000f, 100f, 3))
+    }
+
 }
