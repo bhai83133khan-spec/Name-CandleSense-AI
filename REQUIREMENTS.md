@@ -11,7 +11,7 @@
 - [x] Replay stepping controls
 - [ ] Live market data search/provider
 - [ ] Real historical chart and timeframes
-- [ ] Candlestick pattern library with examples
+- [x] Single-candle pattern classification with Urdu explanations\n- [x] Two-candle Bullish/Bearish Engulfing and Harami recognition with Urdu explanations and unit tests\n- [ ] Expanded candlestick pattern library with visual examples
 - [ ] Fundamentals, tokenomics, and asset background
 - [ ] Support/resistance derived from real history
 - [ ] Bull/bear scenario explanations with uncertainty
