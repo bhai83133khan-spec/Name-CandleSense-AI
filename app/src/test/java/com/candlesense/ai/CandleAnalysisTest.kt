@@ -22,6 +22,27 @@ class CandleAnalysisTest {
     }
 
     @Test
+    fun tapSelectionMatchesRenderedCandleCenters() {
+        val width = 1200f
+        val count = 5
+        val centers = listOf(200f, 400f, 600f, 800f, 1000f)
+        centers.forEachIndexed { index, center ->
+            assertEquals(index, CandleAnalysis.nearestIndexForTap(center, width, count))
+        }
+        assertEquals(2, CandleAnalysis.nearestIndexForTap(550f, width, count))
+    }
+
+    @Test
+    fun tapSelectionClampsEdgesAndRejectsInvalidChartSize() {
+        assertEquals(0, CandleAnalysis.nearestIndexForTap(0f, 600f, 4))
+        assertEquals(3, CandleAnalysis.nearestIndexForTap(600f, 600f, 4))
+        assertEquals(null, CandleAnalysis.nearestIndexForTap(100f, 600f, 0))
+        assertEquals(null, CandleAnalysis.nearestIndexForTap(100f, 0f, 4))
+        assertEquals(null, CandleAnalysis.nearestIndexForTap(Float.NaN, 600f, 4))
+    }
+
+
+    @Test
     fun recentLevelsUseOnlySelectedCandleAndLookbackWindow() {
         val candles = listOf(
             Candle(5.0, 7.0, 4.0, 6.0),
