@@ -68,8 +68,7 @@ object CandlePairAnalysis {
         CandlePairPattern.BEARISH_HARAMI -> "چھوٹی bearish body پہلی bullish body کے اندر ہے؛ رفتار کم یا بدلتی ہوئی ہو سکتی ہے، اکیلا reversal signal نہیں۔"
     }
 
-    private fun isValid(candle: Candle): Boolean =
-        candle.open.isFinite() && candle.high.isFinite() && candle.low.isFinite() && candle.close.isFinite() &&
-            candle.high >= maxOf(candle.open, candle.close) && candle.low <= minOf(candle.open, candle.close) &&
-            candle.high >= candle.low
+    // Reuse the shared validator so two-candle patterns also reject finite endpoints
+    // whose derived range overflows, instead of drifting from single-candle rules.
+    private fun isValid(candle: Candle): Boolean = CandleAnalysis.isValid(candle)
 }
