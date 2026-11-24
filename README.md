@@ -5,6 +5,7 @@ CandleSense AI is an Android-first learning tool for understanding candlesticks,
 ## Working milestone (CI-verified)
 - Offline Compose app with demo BTC/USD, ETH/USD and SOL/USD charts
 - Tap-to-select nearest rendered candle (hit regions aligned to candle centers, with safe edge clamping) and OHLC inspector
+- Invalid/non-finite OHLC values are rejected by single-candle classification and excluded from rolling high/low levels; non-positive lookback is safely rejected
 - Three-candle pattern hints (Three White Soldiers / Three Black Crows) surfaced in the candle inspector with Urdu explanations
 - High-contrast bullish/bearish candle bodies and wicks
 - Body/wick measurements and recent five-candle high/low context
