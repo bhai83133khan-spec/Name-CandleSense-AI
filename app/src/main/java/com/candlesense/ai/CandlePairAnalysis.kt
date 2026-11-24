@@ -8,6 +8,8 @@ enum class CandlePairPattern {
     BEARISH_HARAMI
 }
 
+enum class CandlePairBias { BULLISH, BEARISH, NEUTRAL }
+
 /**
  * Educational two-candle pattern hints.
  * These are shape-based observations, not trade signals; trend and volume context are still required.
@@ -58,6 +60,19 @@ object CandlePairAnalysis {
         CandlePairPattern.BEARISH_ENGULFING -> "Bearish Engulfing"
         CandlePairPattern.BULLISH_HARAMI -> "Bullish Harami"
         CandlePairPattern.BEARISH_HARAMI -> "Bearish Harami"
+    }
+
+    /** Educational directional context only; explicitly avoids presenting patterns as trade signals. */
+    fun bias(pattern: CandlePairPattern): CandlePairBias = when (pattern) {
+        CandlePairPattern.BULLISH_ENGULFING, CandlePairPattern.BULLISH_HARAMI -> CandlePairBias.BULLISH
+        CandlePairPattern.BEARISH_ENGULFING, CandlePairPattern.BEARISH_HARAMI -> CandlePairBias.BEARISH
+        CandlePairPattern.NONE -> CandlePairBias.NEUTRAL
+    }
+
+    fun biasLabelUrdu(pattern: CandlePairPattern): String = when (bias(pattern)) {
+        CandlePairBias.BULLISH -> "ممکنہ bullish bias — یہ trade signal نہیں؛ trend، volume اور اگلی candle کی تصدیق کریں۔"
+        CandlePairBias.BEARISH -> "ممکنہ bearish bias — یہ trade signal نہیں؛ trend، volume اور اگلی candle کی تصدیق کریں۔"
+        CandlePairBias.NEUTRAL -> "Neutral bias — واضح دو-candle سمت نہیں؛ market context دیکھیں۔"
     }
 
     /** Practical confirmation checklist for learners; never presents a pattern as a standalone trade signal. */
