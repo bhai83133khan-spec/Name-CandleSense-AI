@@ -15,7 +15,7 @@ object ThreeCandleAnalysis {
         if (!listOf(first, second, third).all(::isValid)) return ThreeCandlePattern.NONE
         val candles = listOf(first, second, third)
         val bodies = candles.map { kotlin.math.abs(it.close - it.open) }
-        if (bodies.any { it <= 0.0 }) return ThreeCandlePattern.NONE
+        if (bodies.any { !it.isFinite() || it <= 0.0 }) return ThreeCandlePattern.NONE
 
         val whiteSoldiers = candles.all { it.close > it.open } &&
             second.open in minOf(first.open, first.close)..maxOf(first.open, first.close) &&
@@ -49,5 +49,6 @@ object ThreeCandleAnalysis {
     private fun isValid(candle: Candle): Boolean =
         candle.open.isFinite() && candle.high.isFinite() && candle.low.isFinite() && candle.close.isFinite() &&
             candle.high >= maxOf(candle.open, candle.close) &&
-            candle.low <= minOf(candle.open, candle.close) && candle.high >= candle.low
+            candle.low <= minOf(candle.open, candle.close) && candle.high >= candle.low &&
+            (candle.high - candle.low).isFinite()
 }
