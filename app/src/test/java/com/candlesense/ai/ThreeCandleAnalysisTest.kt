@@ -54,4 +54,12 @@ class ThreeCandleAnalysisTest {
             ThreeCandleAnalysis.classify(extreme, ordinary, ordinary))
     }
 
+    @Test
+    fun rejectsFiniteOhlcWithOverflowingRangeOrBody() {
+        val extreme = Candle(0.0, 1.7e308, -1.7e308, -0.1)
+        val ordinary = Candle(10.0, 11.0, 9.0, 10.5)
+        assertEquals(ThreeCandlePattern.NONE,
+            ThreeCandleAnalysis.classify(extreme, ordinary, ordinary))
+    }
+
 }
