@@ -10,10 +10,15 @@ data class Candle(
 )
 
 enum class CandleDirection { BULLISH, BEARISH, NEUTRAL }
-
-enum class CandlePattern { DOJI, HAMMER, SHOOTING_STAR, SPINNING_TOP, MARUBOZU, BULLISH_BODY, BEARISH_BODY }
-
+enum class CandlePattern { INVALID, DOJI, HAMMER, SHOOTING_STAR, SPINNING_TOP, MARUBOZU, BULLISH_BODY, BEARISH_BODY }
 object CandleAnalysis {
+    /** A candle is usable only when all OHLC values are finite and the range encloses its body. */
+    fun isValid(candle: Candle): Boolean =
+        candle.open.isFinite() && candle.high.isFinite() && candle.low.isFinite() && candle.close.isFinite() &&
+            candle.high >= maxOf(candle.open, candle.close) &&
+            candle.low <= minOf(candle.open, candle.close) &&
+            candle.high >= candle.low
+
     /** Maps a chart tap to the nearest candle using the same center spacing as CandleChart. */
     fun nearestIndexForTap(tapX: Float, chartWidth: Float, candleCount: Int): Int? {
         if (candleCount <= 0 || !tapX.isFinite() || !chartWidth.isFinite() || chartWidth <= 0f) return null
@@ -22,15 +27,18 @@ object CandleAnalysis {
         return (tapX / spacing).roundToInt().minus(1).coerceIn(0, candleCount - 1)
     }
 
-
-    fun direction(candle: Candle): CandleDirection = when {
-        candle.close > candle.open -> CandleDirection.BULLISH
-        candle.close < candle.open -> CandleDirection.BEARISH
-        else -> CandleDirection.NEUTRAL
+    fun direction(candle: Candle): CandleDirection {
+        if (!isValid(candle)) return CandleDirection.NEUTRAL
+        return when {
+            candle.close > candle.open -> CandleDirection.BULLISH
+            candle.close < candle.open -> CandleDirection.BEARISH
+            else -> CandleDirection.NEUTRAL
+        }
     }
 
     /** Lightweight single-candle pattern hints; use surrounding trend for confirmation. */
     fun pattern(candle: Candle): CandlePattern {
+        if (!isValid(candle)) return CandlePattern.INVALID
         val range = (candle.high - candle.low).coerceAtLeast(0.0)
         if (range <= 0.0) return CandlePattern.DOJI
         val body = kotlin.math.abs(candle.close - candle.open)
@@ -51,6 +59,7 @@ object CandleAnalysis {
     }
 
     fun patternNameUrdu(candle: Candle): String = when (pattern(candle)) {
+        CandlePattern.INVALID -> "Invalid OHLC data"
         CandlePattern.DOJI -> "Doji (دوجی)"
         CandlePattern.HAMMER -> "Hammer (ہتھوڑا)"
         CandlePattern.SHOOTING_STAR -> "Shooting Star"
@@ -61,6 +70,7 @@ object CandleAnalysis {
     }
 
     fun patternExplanationUrdu(candle: Candle): String = when (pattern(candle)) {
+        CandlePattern.INVALID -> "OHLC ڈیٹا درست نہیں؛ pattern یا wick کی تشریح کرنے سے پہلے candle values چیک کریں۔"
         CandlePattern.DOJI -> "اوپن اور کلوز قریب ہیں؛ مارکیٹ میں غیر فیصلہ کن کیفیت ہو سکتی ہے۔ اگلی candles سے تصدیق کریں۔"
         CandlePattern.HAMMER -> "نیچے لمبی wick قیمت کے نیچے ردّ ہونے کا اشارہ دے سکتی ہے؛ downtrend کے بعد ممکنہ reversal، مگر ضمانت نہیں۔"
         CandlePattern.SHOOTING_STAR -> "اوپر لمبی wick اونچی قیمت ردّ ہونے کا اشارہ دے سکتی ہے؛ اوپر کے رجحان میں احتیاط اور اگلی candle سے تصدیق کریں۔"
@@ -71,32 +81,36 @@ object CandleAnalysis {
     }
 
     fun bodyRatio(candle: Candle): Double {
+        if (!isValid(candle)) return 0.0
         val range = (candle.high - candle.low).coerceAtLeast(0.0)
         if (range <= 0.0) return 0.0
         return (kotlin.math.abs(candle.close - candle.open) / range).coerceIn(0.0, 1.0)
     }
 
     fun upperWick(candle: Candle): Double =
-        (candle.high - maxOf(candle.open, candle.close)).coerceAtLeast(0.0)
+        if (isValid(candle)) (candle.high - maxOf(candle.open, candle.close)).coerceAtLeast(0.0) else 0.0
 
     fun lowerWick(candle: Candle): Double =
-        (minOf(candle.open, candle.close) - candle.low).coerceAtLeast(0.0)
+        if (isValid(candle)) (minOf(candle.open, candle.close) - candle.low).coerceAtLeast(0.0) else 0.0
 
     fun recentHigh(candles: List<Candle>, index: Int, lookback: Int = 5): Double? {
-        if (candles.isEmpty() || index !in candles.indices) return null
+        if (candles.isEmpty() || index !in candles.indices || lookback <= 0) return null
         val start = (index - lookback + 1).coerceAtLeast(0)
-        return candles.subList(start, index + 1).maxOfOrNull { it.high }
+        return candles.subList(start, index + 1).filter(::isValid).maxOfOrNull { it.high }
     }
 
     fun recentLow(candles: List<Candle>, index: Int, lookback: Int = 5): Double? {
-        if (candles.isEmpty() || index !in candles.indices) return null
+        if (candles.isEmpty() || index !in candles.indices || lookback <= 0) return null
         val start = (index - lookback + 1).coerceAtLeast(0)
-        return candles.subList(start, index + 1).minOfOrNull { it.low }
+        return candles.subList(start, index + 1).filter(::isValid).minOfOrNull { it.low }
     }
 
-    fun buyerSellerSummary(candle: Candle): String = when (direction(candle)) {
-        CandleDirection.BULLISH -> "اس مدت میں خریدار نسبتاً مضبوط رہے، مگر ایک candle مستقبل کی ضمانت نہیں۔"
-        CandleDirection.BEARISH -> "اس مدت میں فروخت کنندگان نسبتاً مضبوط رہے، مگر ایک candle مستقبل کی ضمانت نہیں۔"
-        CandleDirection.NEUTRAL -> "Open اور Close تقریباً برابر ہیں؛ دونوں طرف کی قوت کا واضح فیصلہ صرف اس candle سے نہیں ہوتا۔"
+    fun buyerSellerSummary(candle: Candle): String {
+        if (!isValid(candle)) return "OHLC ڈیٹا غلط ہے؛ buyers/sellers کی تشریح قابلِ اعتماد نہیں۔"
+        return when (direction(candle)) {
+            CandleDirection.BULLISH -> "اس مدت میں خریدار نسبتاً مضبوط رہے، مگر ایک candle مستقبل کی ضمانت نہیں۔"
+            CandleDirection.BEARISH -> "اس مدت میں فروخت کنندگان نسبتاً مضبوط رہے، مگر ایک candle مستقبل کی ضمانت نہیں۔"
+            CandleDirection.NEUTRAL -> "Open اور Close تقریباً برابر ہیں؛ دونوں طرف کی قوت کا واضح فیصلہ صرف اس candle سے نہیں ہوتا۔"
+        }
     }
 }
