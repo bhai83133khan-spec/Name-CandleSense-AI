@@ -145,6 +145,12 @@ private fun CandleSenseApp() {
                         if (previous == null) "Previous candle: none" else "Previous close: ${formatPrice(previous.close)} • Current close is ${if (candle.close >= previous.close) "above" else "below"} it",
                         color = Color(0xFF40556B)
                     )
+                    if (previous != null) {
+                        val pairPattern = CandlePairAnalysis.classify(previous, candle)
+                        Text("Two-candle pattern: ${CandlePairAnalysis.nameUrdu(pairPattern)}",
+                            color = Color(0xFF176B57), fontWeight = FontWeight.Bold)
+                        Text(CandlePairAnalysis.explanationUrdu(pairPattern), color = Color(0xFF40556B))
+                    }
                     if (recentHigh != null && recentLow != null) {
                         Text("Recent 5 candles: rough high ${formatPrice(recentHigh)} / low ${formatPrice(recentLow)}",
                             color = Color(0xFF40556B))
