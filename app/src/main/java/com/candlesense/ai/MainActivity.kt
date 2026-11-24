@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -86,7 +88,7 @@ private fun CandleSenseApp() {
 
     MaterialTheme(colorScheme = colorScheme) {
         Column(
-            Modifier.fillMaxSize().background(Color(0xFFF1F5FA)).padding(14.dp),
+            Modifier.fillMaxSize().background(Color(0xFFF1F5FA)).padding(14.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text("CANDLESENSE AI", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black,
