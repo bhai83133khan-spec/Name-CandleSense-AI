@@ -32,6 +32,14 @@ class CandlePairAnalysisTest {
     }
 
     @Test
+    fun rejectsOhlcWhoseFiniteRangeOverflowsDouble() {
+        val extreme = Candle(-Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE / 2.0)
+        val normal = Candle(10.0, 12.0, 8.0, 11.0)
+        assertEquals(CandlePairPattern.NONE, CandlePairAnalysis.classify(extreme, normal))
+        assertEquals(CandlePairPattern.NONE, CandlePairAnalysis.classify(normal, extreme))
+    }
+
+    @Test
     fun rejectsSameDirectionAndInvalidOhlc() {
         assertEquals(
             CandlePairPattern.NONE,
