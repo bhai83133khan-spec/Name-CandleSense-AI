@@ -13,11 +13,13 @@ enum class ThreeCandleReversalPattern {
 object ThreeCandleReversalAnalysis {
     fun classify(first: Candle, middle: Candle, last: Candle): ThreeCandleReversalPattern {
         if (!listOf(first, middle, last).all(::isValid)) return ThreeCandleReversalPattern.NONE
-        val firstBody = kotlin.math.abs(first.close - first.open)
-        val middleBody = kotlin.math.abs(middle.close - middle.open)
-        if (firstBody <= 0.0 || middleBody <= 0.0) return ThreeCandleReversalPattern.NONE
+        val bodySizes = listOf(first, middle, last).map { kotlin.math.abs(it.close - it.open) }
+        if (bodySizes.any { !it.isFinite() || it <= 0.0 }) return ThreeCandleReversalPattern.NONE
+        val firstBody = bodySizes[0]
+        val middleBody = bodySizes[1]
 
-        val firstMidpoint = (first.open + first.close) / 2.0
+        // Halving before addition avoids overflow when both finite prices are very large.
+        val firstMidpoint = first.open * 0.5 + first.close * 0.5
         val smallMiddle = middleBody <= firstBody * 0.35
         val morningStar = first.close < first.open &&
             smallMiddle &&
