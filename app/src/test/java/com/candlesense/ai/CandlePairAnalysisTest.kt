@@ -32,6 +32,18 @@ class CandlePairAnalysisTest {
     }
 
     @Test
+    fun everyDetectedPairPatternHasActionableConfirmationChecklist() {
+        CandlePairPattern.values().forEach { pattern ->
+            assertTrue("Checklist missing for $pattern",
+                CandlePairAnalysis.confirmationChecklistUrdu(pattern).isNotBlank())
+        }
+        assertTrue(CandlePairAnalysis.confirmationChecklistUrdu(CandlePairPattern.BULLISH_ENGULFING)
+            .contains("support"))
+        assertTrue(CandlePairAnalysis.confirmationChecklistUrdu(CandlePairPattern.BEARISH_ENGULFING)
+            .contains("resistance"))
+    }
+
+    @Test
     fun rejectsOhlcWhoseFiniteRangeOverflowsDouble() {
         val extreme = Candle(-Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE / 2.0)
         val normal = Candle(10.0, 12.0, 8.0, 11.0)
