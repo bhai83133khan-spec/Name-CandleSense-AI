@@ -2,7 +2,7 @@
 
 ## Learning experience
 - [x] Offline demo chart and sample assets
-- [x] Tap candle selection
+- [x] Tap candle selection (nearest rendered-candle hit testing and safe edge clamping)
 - [x] OHLC inspector
 - [x] Body/wick measurements
 - [x] Buyers/sellers interpretation (educational, non-predictive)
