@@ -60,6 +60,15 @@ object CandlePairAnalysis {
         CandlePairPattern.BEARISH_HARAMI -> "Bearish Harami"
     }
 
+    /** Practical confirmation checklist for learners; never presents a pattern as a standalone trade signal. */
+    fun confirmationChecklistUrdu(pattern: CandlePairPattern): String = when (pattern) {
+        CandlePairPattern.NONE -> "تصدیق: trend، support/resistance، volume اور اگلی candle دیکھیں۔"
+        CandlePairPattern.BULLISH_ENGULFING -> "تصدیق: downtrend یا support، volume میں اضافہ، اور اگلی candle کا bullish follow-through دیکھیں۔"
+        CandlePairPattern.BEARISH_ENGULFING -> "تصدیق: uptrend یا resistance، volume میں اضافہ، اور اگلی candle کا bearish follow-through دیکھیں۔"
+        CandlePairPattern.BULLISH_HARAMI -> "تصدیق: support، volume، اور bullish follow-through candle کے بغیر اسے reversal نہ سمجھیں۔"
+        CandlePairPattern.BEARISH_HARAMI -> "تصدیق: resistance، volume، اور bearish follow-through candle کے بغیر اسے reversal نہ سمجھیں۔"
+    }
+
     fun explanationUrdu(pattern: CandlePairPattern): String = when (pattern) {
         CandlePairPattern.NONE -> "دو candles کی شکل سے کوئی واضح pattern نہیں بنا؛ trend اور volume بھی دیکھیں۔"
         CandlePairPattern.BULLISH_ENGULFING -> "دوسری bullish body پہلی bearish body کو گھیرتی ہے؛ خریداروں کی قوت بڑھنے کا ممکنہ اشارہ، مگر تصدیق ضروری ہے۔"
