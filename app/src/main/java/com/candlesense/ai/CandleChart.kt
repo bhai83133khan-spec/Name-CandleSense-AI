@@ -24,9 +24,7 @@ fun CandleChart(
             .height(230.dp)
             .pointerInput(candles.size) {
                 detectTapGestures { tap ->
-                    val index = (tap.x / size.width * candles.size).toInt()
-                        .coerceIn(0, candles.lastIndex)
-                    onSelect(index)
+                    CandleAnalysis.nearestIndexForTap(tap.x, size.width, candles.size)?.let(onSelect)
                 }
             }
     ) {
