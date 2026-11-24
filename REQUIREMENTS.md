@@ -38,4 +38,4 @@ Demo data is hard-coded and labeled. No exchange/broker connection or trade exec
 - [x] Three White Soldiers / Three Black Crows shape classification with Urdu learning explanations and unit tests
 - [x] Integrate three-candle classifications into the selected-candle inspector
 - [ ] Add visual examples for three-candle patterns
-- [ ] Add Morning Star / Evening Star three-candle reversal classifier, Urdu explanations, inspector integration, and tests (implementation committed; CI verification pending)
+- [x] Add Morning Star / Evening Star three-candle reversal classifier, Urdu explanations, inspector integration, and tests (CI verified in run #41; overflow edge cases hardened)
