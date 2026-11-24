@@ -158,6 +158,12 @@ private fun CandleSenseApp() {
                         Text("Three-candle pattern: ${ThreeCandleAnalysis.nameUrdu(threePattern)}",
                             color = Color(0xFF176B57), fontWeight = FontWeight.Bold)
                         Text(ThreeCandleAnalysis.explanationUrdu(threePattern), color = Color(0xFF40556B))
+                        val starPattern = ThreeCandleReversalAnalysis.classify(
+                            candles[selectedIndex - 2], candles[selectedIndex - 1], candle
+                        )
+                        Text("Star reversal: ${ThreeCandleReversalAnalysis.nameUrdu(starPattern)}",
+                            color = Color(0xFF176B57), fontWeight = FontWeight.Bold)
+                        Text(ThreeCandleReversalAnalysis.explanationUrdu(starPattern), color = Color(0xFF40556B))
                     }
                     if (recentHigh != null && recentLow != null) {
                         Text("Recent 5 candles: rough high ${formatPrice(recentHigh)} / low ${formatPrice(recentLow)}",
