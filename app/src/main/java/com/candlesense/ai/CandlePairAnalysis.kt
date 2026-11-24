@@ -72,7 +72,7 @@ object CandlePairAnalysis {
     fun biasLabelUrdu(pattern: CandlePairPattern): String = when (bias(pattern)) {
         CandlePairBias.BULLISH -> "ممکنہ bullish bias — یہ trade signal نہیں؛ trend، volume اور اگلی candle کی تصدیق کریں۔"
         CandlePairBias.BEARISH -> "ممکنہ bearish bias — یہ trade signal نہیں؛ trend، volume اور اگلی candle کی تصدیق کریں۔"
-        CandlePairBias.NEUTRAL -> "Neutral bias — واضح دو-candle سمت نہیں؛ market context دیکھیں۔"
+        CandlePairBias.NEUTRAL -> "Neutral bias — واضح دو-candle سمت نہیں؛ یہ trade signal نہیں، market context دیکھیں۔"
     }
 
     /** Practical confirmation checklist for learners; never presents a pattern as a standalone trade signal. */
