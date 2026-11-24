@@ -62,11 +62,11 @@ object CandleAnalysis {
         CandlePattern.INVALID -> "Invalid OHLC data"
         CandlePattern.DOJI -> "Doji (دوجی)"
         CandlePattern.HAMMER -> "Hammer (ہتھوڑا)"
-        CandlePattern.SHOOTING_STAR -> "Shooting Star"
-        CandlePattern.SPINNING_TOP -> "Spinning Top"
-        CandlePattern.MARUBOZU -> "Marubozu"
-        CandlePattern.BULLISH_BODY -> "Bullish Body"
-        CandlePattern.BEARISH_BODY -> "Bearish Body"
+        CandlePattern.SHOOTING_STAR -> "Shooting Star (شوٹنگ اسٹار)"
+        CandlePattern.SPINNING_TOP -> "Spinning Top (اسپننگ ٹاپ)"
+        CandlePattern.MARUBOZU -> "Marubozu (مربوزو)"
+        CandlePattern.BULLISH_BODY -> "Bullish Body (تیزی والی باڈی)"
+        CandlePattern.BEARISH_BODY -> "Bearish Body (مندی والی باڈی)"
     }
 
     fun patternExplanationUrdu(candle: Candle): String = when (pattern(candle)) {
