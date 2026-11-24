@@ -60,4 +60,13 @@ class ThreeCandleReversalAnalysisTest {
             ThreeCandleReversalAnalysis.classify(extreme, middle, last))
     }
 
+    @Test
+    fun rejectsFiniteEndpointsWithOverflowingRange() {
+        val extreme = Candle(0.0, 1.7e308, -1.7e308, -0.1)
+        val middle = Candle(0.0, 0.1, -0.1, 0.01)
+        val last = Candle(-0.1, 0.2, -0.2, 0.1)
+        assertEquals(ThreeCandleReversalPattern.NONE,
+            ThreeCandleReversalAnalysis.classify(extreme, middle, last))
+    }
+
 }
