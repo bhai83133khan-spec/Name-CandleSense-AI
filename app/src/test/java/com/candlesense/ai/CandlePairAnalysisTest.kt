@@ -44,6 +44,19 @@ class CandlePairAnalysisTest {
     }
 
     @Test
+    fun directionalBiasIsConsistentAndExplicitlyNonPredictive() {
+        assertEquals(CandlePairBias.BULLISH, CandlePairAnalysis.bias(CandlePairPattern.BULLISH_ENGULFING))
+        assertEquals(CandlePairBias.BULLISH, CandlePairAnalysis.bias(CandlePairPattern.BULLISH_HARAMI))
+        assertEquals(CandlePairBias.BEARISH, CandlePairAnalysis.bias(CandlePairPattern.BEARISH_ENGULFING))
+        assertEquals(CandlePairBias.BEARISH, CandlePairAnalysis.bias(CandlePairPattern.BEARISH_HARAMI))
+        assertEquals(CandlePairBias.NEUTRAL, CandlePairAnalysis.bias(CandlePairPattern.NONE))
+        CandlePairPattern.values().forEach { pattern ->
+            assertTrue(CandlePairAnalysis.biasLabelUrdu(pattern).contains("trade signal"))
+        }
+        assertTrue(CandlePairAnalysis.biasLabelUrdu(CandlePairPattern.NONE).contains("Neutral"))
+    }
+
+    @Test
     fun rejectsOhlcWhoseFiniteRangeOverflowsDouble() {
         val extreme = Candle(-Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE / 2.0)
         val normal = Candle(10.0, 12.0, 8.0, 11.0)
