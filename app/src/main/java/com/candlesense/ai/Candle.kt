@@ -1,5 +1,7 @@
 package com.candlesense.ai
 
+import kotlin.math.roundToInt
+
 data class Candle(
     val open: Double,
     val high: Double,
@@ -10,6 +12,15 @@ data class Candle(
 enum class CandleDirection { BULLISH, BEARISH, NEUTRAL }
 
 object CandleAnalysis {
+    /** Maps a chart tap to the nearest candle using the same center spacing as CandleChart. */
+    fun nearestIndexForTap(tapX: Float, chartWidth: Float, candleCount: Int): Int? {
+        if (candleCount <= 0 || !tapX.isFinite() || !chartWidth.isFinite() || chartWidth <= 0f) return null
+        val spacing = chartWidth / (candleCount + 1)
+        if (!spacing.isFinite() || spacing <= 0f) return null
+        return (tapX / spacing).roundToInt().minus(1).coerceIn(0, candleCount - 1)
+    }
+
+
     fun direction(candle: Candle): CandleDirection = when {
         candle.close > candle.open -> CandleDirection.BULLISH
         candle.close < candle.open -> CandleDirection.BEARISH
