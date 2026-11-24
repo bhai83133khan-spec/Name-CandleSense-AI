@@ -46,9 +46,6 @@ object ThreeCandleAnalysis {
         ThreeCandlePattern.THREE_BLACK_CROWS -> "تین bearish candles کے closes مسلسل نیچے ہیں اور اگلی openings پچھلی body کے اندر ہیں؛ selling pressure کا ممکنہ اشارہ، یقینی پیش گوئی نہیں۔"
     }
 
-    private fun isValid(candle: Candle): Boolean =
-        candle.open.isFinite() && candle.high.isFinite() && candle.low.isFinite() && candle.close.isFinite() &&
-            candle.high >= maxOf(candle.open, candle.close) &&
-            candle.low <= minOf(candle.open, candle.close) && candle.high >= candle.low &&
-            (candle.high - candle.low).isFinite()
+    /** Use the same OHLC/range guard as single- and two-candle analysis. */
+    private fun isValid(candle: Candle): Boolean = CandleAnalysis.isValid(candle)
 }
