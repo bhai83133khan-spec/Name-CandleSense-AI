@@ -14,7 +14,7 @@ class CandleAnalysisTest {
 
     @Test
     fun singleCandlePatternsAreClassifiedAndExplained() {
-        assertEquals(CandlePattern.DOJI, CandleAnalysis.pattern(Candle(10.0, 11.0, 9.0, 10.05)))
+        assertEquals(CandlePattern.DOJI, CandleAnalysis.pattern(Candle(10.0, 11.0, 9.0, 10.05))
         assertEquals(CandlePattern.HAMMER, CandleAnalysis.pattern(Candle(100.0, 103.0, 90.0, 102.0)))
         assertEquals(CandlePattern.SHOOTING_STAR, CandleAnalysis.pattern(Candle(102.0, 112.0, 99.0, 100.0)))
         assertEquals(CandlePattern.SPINNING_TOP, CandleAnalysis.pattern(Candle(100.0, 104.0, 97.0, 101.0)))
@@ -22,6 +22,15 @@ class CandleAnalysisTest {
         assertEquals(CandlePattern.BULLISH_BODY, CandleAnalysis.pattern(Candle(100.0, 104.0, 98.0, 102.0)))
         assertEquals(CandlePattern.BEARISH_BODY, CandleAnalysis.pattern(Candle(102.0, 104.0, 98.0, 100.0)))
         assertTrue(CandleAnalysis.patternExplanationUrdu(Candle(100.0, 103.0, 90.0, 102.0)).isNotBlank())
+    }
+
+    @Test
+    fun patternNamesIncludeUrduLabelsForBeginnerLearning() {
+        assertEquals("Shooting Star (شوٹنگ اسٹار)", CandleAnalysis.patternNameUrdu(Candle(102.0, 112.0, 99.0, 100.0)))
+        assertEquals("Spinning Top (اسپننگ ٹاپ)", CandleAnalysis.patternNameUrdu(Candle(100.0, 104.0, 97.0, 101.0)))
+        assertEquals("Marubozu (مربوزو)", CandleAnalysis.patternNameUrdu(Candle(100.0, 109.0, 100.0, 109.0)))
+        assertEquals("Bullish Body (تیزی والی باڈی)", CandleAnalysis.patternNameUrdu(Candle(100.0, 104.0, 98.0, 102.0)))
+        assertEquals("Bearish Body (مندی والی باڈی)", CandleAnalysis.patternNameUrdu(Candle(102.0, 104.0, 98.0, 100.0)))
     }
 
     @Test
@@ -52,7 +61,6 @@ class CandleAnalysisTest {
         assertEquals(null, CandleAnalysis.nearestIndexForTap(100f, 0f, 4))
         assertEquals(null, CandleAnalysis.nearestIndexForTap(Float.NaN, 600f, 4))
     }
-
 
     @Test
     fun recentLevelsUseOnlySelectedCandleAndLookbackWindow() {
