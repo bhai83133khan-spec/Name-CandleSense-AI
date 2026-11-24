@@ -28,3 +28,8 @@
 
 ## Current limitation
 Demo data is hard-coded and labeled. No exchange/broker connection or trade execution exists.
+
+
+## New pattern-library milestone (logic added, UI wiring pending)
+- [x] Three White Soldiers / Three Black Crows shape classification with Urdu learning explanations and unit tests
+- [ ] Integrate three-candle classifications into the selected-candle inspector and add visual examples
