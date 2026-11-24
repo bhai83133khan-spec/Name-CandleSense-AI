@@ -35,4 +35,20 @@ class ThreeCandleReversalAnalysisTest {
         assertEquals(ThreeCandleReversalPattern.NONE,
             ThreeCandleReversalAnalysis.classify(first, middle, last))
     }
+    @Test fun midpointCalculationDoesNotOverflowForLargeFinitePrices() {
+        val first = Candle(1.6e308, 1.65e308, 1.15e308, 1.2e308)
+        val middle = Candle(1.2e308, 1.22e308, 1.19e308, 1.21e308)
+        val last = Candle(1.5e308, 1.55e308, 1.44e308, 1.45e308)
+        assertEquals(ThreeCandleReversalPattern.NONE,
+            ThreeCandleReversalAnalysis.classify(first, middle, last))
+    }
+
+    @Test fun overflowingBodySizesAreRejectedInsteadOfTreatedAsSmallStarBodies() {
+        val first = Candle(1.7e308, 1.7e308, -1.7e308, -1.7e308)
+        val middle = Candle(-1.7e308, 1.7e308, -1.7e308, 1.7e308)
+        val last = Candle(-1.0e307, 1.1e307, -1.1e307, 1.0e307)
+        assertEquals(ThreeCandleReversalPattern.NONE,
+            ThreeCandleReversalAnalysis.classify(first, middle, last))
+    }
+
 }
