@@ -52,5 +52,5 @@ object ThreeCandleReversalAnalysis {
         candle.open.isFinite() && candle.high.isFinite() && candle.low.isFinite() && candle.close.isFinite() &&
             candle.high >= maxOf(candle.open, candle.close) &&
             candle.low <= minOf(candle.open, candle.close) &&
-            candle.high >= candle.low
+            candle.high >= candle.low && (candle.high - candle.low).isFinite()
 }
