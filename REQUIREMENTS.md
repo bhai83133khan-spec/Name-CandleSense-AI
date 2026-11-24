@@ -11,7 +11,10 @@
 - [x] Replay stepping controls
 - [ ] Live market data search/provider
 - [ ] Real historical chart and timeframes
-- [x] Single-candle pattern classification with Urdu explanations\n- [x] Two-candle Bullish/Bearish Engulfing and Harami recognition with Urdu explanations and unit tests\n- [ ] Expanded candlestick pattern library with visual examples
+- [x] Single-candle pattern classification with Urdu explanations
+- [x] Two-candle Bullish/Bearish Engulfing and Harami recognition with Urdu explanations and unit tests
+- [x] Three-candle Soldiers/Crows classification with Urdu explanations and unit tests
+- [ ] Expanded candlestick pattern library with visual examples
 - [ ] Fundamentals, tokenomics, and asset background
 - [ ] Support/resistance derived from real history
 - [ ] Bull/bear scenario explanations with uncertainty
@@ -29,8 +32,7 @@
 ## Current limitation
 Demo data is hard-coded and labeled. No exchange/broker connection or trade execution exists.
 
-
-## New pattern-library milestone (logic added, UI wiring pending)
+## Three-candle pattern milestone
 - [x] Three White Soldiers / Three Black Crows shape classification with Urdu learning explanations and unit tests
 - [x] Integrate three-candle classifications into the selected-candle inspector
 - [ ] Add visual examples for three-candle patterns
