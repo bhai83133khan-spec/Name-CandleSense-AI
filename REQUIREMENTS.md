@@ -15,6 +15,7 @@
 - [ ] Real historical chart and timeframes
 - [x] Single-candle pattern classification with Urdu explanations
 - [x] Two-candle Bullish/Bearish Engulfing and Harami recognition with Urdu explanations and unit tests
+- [x] Two-candle classifiers share overflow-safe OHLC validation with single-candle analysis (regression tests)
 - [x] Three-candle Soldiers/Crows classification with Urdu explanations and unit tests
 - [ ] Expanded candlestick pattern library with visual examples
 - [ ] Fundamentals, tokenomics, and asset background
