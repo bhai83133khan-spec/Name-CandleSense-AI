@@ -4,7 +4,7 @@ CandleSense AI is an Android-first learning tool for understanding candlesticks,
 
 ## Working milestone (CI-verified)
 - Offline Compose app with demo BTC/USD, ETH/USD and SOL/USD charts
-- Tap-to-select candle and OHLC inspector
+- Tap-to-select nearest rendered candle (hit regions aligned to candle centers, with safe edge clamping) and OHLC inspector
 - High-contrast bullish/bearish candle bodies and wicks
 - Body/wick measurements and recent five-candle high/low context
 - Buyer/seller interpretation and previous-close comparison
