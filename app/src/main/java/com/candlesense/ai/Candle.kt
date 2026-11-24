@@ -12,12 +12,16 @@ data class Candle(
 enum class CandleDirection { BULLISH, BEARISH, NEUTRAL }
 enum class CandlePattern { INVALID, DOJI, HAMMER, SHOOTING_STAR, SPINNING_TOP, MARUBOZU, BULLISH_BODY, BEARISH_BODY }
 object CandleAnalysis {
-    /** A candle is usable only when all OHLC values are finite and the range encloses its body. */
-    fun isValid(candle: Candle): Boolean =
-        candle.open.isFinite() && candle.high.isFinite() && candle.low.isFinite() && candle.close.isFinite() &&
-            candle.high >= maxOf(candle.open, candle.close) &&
-            candle.low <= minOf(candle.open, candle.close) &&
-            candle.high >= candle.low
+    /** A candle is usable only when OHLC is finite, encloses its body, and derived range arithmetic stays finite. */
+    fun isValid(candle: Candle): Boolean {
+        if (!candle.open.isFinite() || !candle.high.isFinite() || !candle.low.isFinite() || !candle.close.isFinite()) return false
+        if (candle.high < maxOf(candle.open, candle.close) ||
+            candle.low > minOf(candle.open, candle.close) ||
+            candle.high < candle.low
+        ) return false
+        // Finite endpoints can still overflow when subtracted (e.g. +Double.MAX_VALUE - -Double.MAX_VALUE).
+        return (candle.high - candle.low).isFinite()
+    }
 
     /** Maps a chart tap to the nearest candle using the same center spacing as CandleChart. */
     fun nearestIndexForTap(tapX: Float, chartWidth: Float, candleCount: Int): Int? {
