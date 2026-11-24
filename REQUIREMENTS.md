@@ -8,6 +8,8 @@
 - [x] Buyers/sellers interpretation (educational, non-predictive)
 - [x] Previous candle context
 - [x] Rough rolling high/low for selected candles
+- [x] Rolling-level calculation ignores invalid OHLC data and rejects non-positive lookback
+- [x] Single-candle OHLC validation (finite values and high/low enclosing the body) before classification
 - [x] Replay stepping controls
 - [ ] Live market data search/provider
 - [ ] Real historical chart and timeframes
