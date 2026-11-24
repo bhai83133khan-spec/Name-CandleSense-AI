@@ -11,6 +11,8 @@ data class Candle(
 
 enum class CandleDirection { BULLISH, BEARISH, NEUTRAL }
 
+enum class CandlePattern { DOJI, HAMMER, SHOOTING_STAR, SPINNING_TOP, MARUBOZU, BULLISH_BODY, BEARISH_BODY }
+
 object CandleAnalysis {
     /** Maps a chart tap to the nearest candle using the same center spacing as CandleChart. */
     fun nearestIndexForTap(tapX: Float, chartWidth: Float, candleCount: Int): Int? {
@@ -25,6 +27,47 @@ object CandleAnalysis {
         candle.close > candle.open -> CandleDirection.BULLISH
         candle.close < candle.open -> CandleDirection.BEARISH
         else -> CandleDirection.NEUTRAL
+    }
+
+    /** Lightweight single-candle pattern hints; use surrounding trend for confirmation. */
+    fun pattern(candle: Candle): CandlePattern {
+        val range = (candle.high - candle.low).coerceAtLeast(0.0)
+        if (range <= 0.0) return CandlePattern.DOJI
+        val body = kotlin.math.abs(candle.close - candle.open)
+        val upper = upperWick(candle)
+        val lower = lowerWick(candle)
+        val ratio = body / range
+
+        if (ratio <= 0.10) return CandlePattern.DOJI
+        if (ratio < 0.35 && lower >= body * 2.0 && upper <= body * 0.5) return CandlePattern.HAMMER
+        if (ratio < 0.35 && upper >= body * 2.0 && lower <= body * 0.5) return CandlePattern.SHOOTING_STAR
+        if (ratio <= 0.30 && upper > body && lower > body) return CandlePattern.SPINNING_TOP
+        if (ratio >= 0.85) return CandlePattern.MARUBOZU
+        return when (direction(candle)) {
+            CandleDirection.BULLISH -> CandlePattern.BULLISH_BODY
+            CandleDirection.BEARISH -> CandlePattern.BEARISH_BODY
+            CandleDirection.NEUTRAL -> CandlePattern.DOJI
+        }
+    }
+
+    fun patternNameUrdu(candle: Candle): String = when (pattern(candle)) {
+        CandlePattern.DOJI -> "Doji (دوجی)"
+        CandlePattern.HAMMER -> "Hammer (ہتھوڑا)"
+        CandlePattern.SHOOTING_STAR -> "Shooting Star"
+        CandlePattern.SPINNING_TOP -> "Spinning Top"
+        CandlePattern.MARUBOZU -> "Marubozu"
+        CandlePattern.BULLISH_BODY -> "Bullish Body"
+        CandlePattern.BEARISH_BODY -> "Bearish Body"
+    }
+
+    fun patternExplanationUrdu(candle: Candle): String = when (pattern(candle)) {
+        CandlePattern.DOJI -> "اوپن اور کلوز قریب ہیں؛ مارکیٹ میں غیر فیصلہ کن کیفیت ہو سکتی ہے۔ اگلی candles سے تصدیق کریں۔"
+        CandlePattern.HAMMER -> "نیچے لمبی wick قیمت کے نیچے ردّ ہونے کا اشارہ دے سکتی ہے؛ downtrend کے بعد ممکنہ reversal، مگر ضمانت نہیں۔"
+        CandlePattern.SHOOTING_STAR -> "اوپر لمبی wick اونچی قیمت ردّ ہونے کا اشارہ دے سکتی ہے؛ اوپر کے رجحان میں احتیاط اور اگلی candle سے تصدیق کریں۔"
+        CandlePattern.SPINNING_TOP -> "چھوٹا body اور دونوں طرف wicks بتاتی ہیں کہ دونوں سمت حرکت ہوئی مگر فیصلہ کمزور رہا۔"
+        CandlePattern.MARUBOZU -> "body بڑی اور wicks چھوٹی ہیں؛ اس دورانیے میں directional momentum مضبوط تھا، مگر اکیلی candle کافی نہیں۔"
+        CandlePattern.BULLISH_BODY -> "کلوز اوپن سے اوپر ہے؛ buyers نسبتاً مضبوط رہے۔ اسے support، trend اور volume کے ساتھ دیکھیں۔"
+        CandlePattern.BEARISH_BODY -> "کلوز اوپن سے نیچے ہے؛ sellers نسبتاً مضبوط رہے۔ اسے support، trend اور volume کے ساتھ دیکھیں۔"
     }
 
     fun bodyRatio(candle: Candle): Double {
