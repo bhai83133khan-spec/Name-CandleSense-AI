@@ -39,3 +39,4 @@ Demo data is hard-coded and labeled. No exchange/broker connection or trade exec
 - [x] Integrate three-candle classifications into the selected-candle inspector
 - [ ] Add visual examples for three-candle patterns
 - [x] Add Morning Star / Evening Star three-candle reversal classifier, Urdu explanations, inspector integration, and tests (CI verified in run #41; overflow edge cases hardened)
+- [x] Reject finite OHLC endpoints whose derived range overflows in three-candle and Star reversal classifiers (regression tests)
