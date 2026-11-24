@@ -23,7 +23,7 @@ class CandlePairAnalysisTest {
     @Test
     fun detectsBullishAndBearishHarami() {
         val bullishPrevious = Candle(10.0, 12.0, 8.0, 9.0)
-        val bullishCurrent = Candle(8.5, 10.0, 8.2, 9.5)
+        val bullishCurrent = Candle(9.1, 10.0, 9.0, 9.8)
         assertEquals(CandlePairPattern.BULLISH_HARAMI, CandlePairAnalysis.classify(bullishPrevious, bullishCurrent))
 
         val bearishPrevious = Candle(8.0, 11.0, 7.5, 10.5)
